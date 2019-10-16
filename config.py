@@ -1,7 +1,7 @@
 # for sql:
 
 DBNAME = ''
-USER = ""
+USER = ''
 PASSWORD = ''
 HOST = ''
 PORT = 5432
