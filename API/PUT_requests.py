@@ -5,7 +5,7 @@ from psycopg2.extras import DictCursor
 from Basic_HTTP_authentication import auth
 from config import DBNAME, USER, PASSWORD, HOST, PORT
 from crutches import id_searcher, json_converter_2, process_id_verification
-from testSQL3 import sql
+from psycopg2 import sql
 
 blueprint = Blueprint('processes_put', __name__)
 
