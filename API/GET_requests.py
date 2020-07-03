@@ -1,45 +1,31 @@
-import psycopg2
-from flask import Blueprint, jsonify, abort
-from psycopg2.extras import DictCursor
+from flask import Blueprint, jsonify, abort, request
 
-
-from config import DBNAME, USER, PASSWORD, HOST, PORT
+from oracledb import OracleProvider
 
 blueprint = Blueprint('processes_get', __name__)
 
-conn = psycopg2.connect(dbname=DBNAME,
-                        user=USER,
-                        password=PASSWORD,
-                        host=HOST,
-                        port=PORT)
+conn = OracleProvider().cursor
 
 
-@blueprint.route('/api/v1.0/processes', methods=['GET'])
-def get_processes(conn=conn):
+@blueprint.route('/api/v1.0/<scheme>/<table>', methods=['GET'])
+def get_processes(table, scheme):
+    if not request.json:
+        abort(400)
     processes = []
-    # with closing(conn) as conn:
-    with conn.cursor() as cursor:
-        cursor.execute('select * from "process"')
-        for row in cursor:
-            processes.append({'executor_id': row[0],
-                              'process_id': row[1],
-                              'process_name': row[2],
-                              'description': row[3],
-                              'activity_flag': row[4]})
+    conn.execute(f'select * from {scheme}."{table}" FETCH FIRST 100 ROWS ONLY')
+    for row in conn:
+        processes.append({f'{j[0]}': i for i, j in zip(row, conn.description)})
 
     return jsonify({'processes': processes})
 
+# непонятен принцип формирования http строки
+@blueprint.route('/api/v1.0/<scheme>/<table>{<column>:[<any_key>]}', methods=['GET'])
+def get_process(table, scheme, column, any_key):
+    if not request.json:
+        abort(400)
+    processes = []
+    conn.execute(f'select * from {scheme}."{table}" where {column}=\'{any_key}\' FETCH FIRST 100 ROWS ONLY')
+    for row in conn:
+        processes.append({f'{j[0]}': i for i, j in zip(row, conn.description)})
 
-@blueprint.route('/api/v1.0/processes/<int:id>', methods=['GET'])
-def get_process(id):
-    with conn.cursor(cursor_factory=DictCursor) as cursor:
-        conn.autocommit = True
-        cursor.execute(f'select * from "process"')
-        a = list(filter(lambda row: row['process_id'] == id, cursor))
-        if len(a) == 0:
-            abort(404)
-    return jsonify({'process': {'executor_id': a[0][0],
-                                'process_id': a[0][1],
-                                'process_name': a[0][2],
-                                'description': a[0][3],
-                                'activity_flag': a[0][4]}})
+    return jsonify({'processes': processes})
