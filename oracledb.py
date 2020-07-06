@@ -12,4 +12,5 @@ class OracleProvider:
                                          config["Oracle"]["password"],
                                          config["Oracle"]["address"])
         self.cursor = self.connect.cursor()
+        self.connect.autocommit = True
 
