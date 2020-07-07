@@ -1,4 +1,3 @@
-import ast
 import re
 
 from flask import abort
@@ -7,7 +6,7 @@ from flask import abort
 
 def json_converter(json):
     a = list(zip(*json.items()))
-    return [str(a[0]).replace("'", "").replace(",)", ")"),
+    return [str(a[0]).replace("'", "\"").replace(",)", ")"),
             str(a[1]).replace(",)", ")")]
 
 
