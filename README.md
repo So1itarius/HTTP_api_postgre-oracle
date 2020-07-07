@@ -40,32 +40,32 @@
 ###### GET_requests.py - все GET запросы:
 
 
-_.../api/v1.0/<scheme>/<table>_ - показать все процессы из любой таблицы в виде json.
+_.../api/v1.0/\<scheme>/\<table>_ - показать все процессы из любой таблицы в виде json.
 
 Пример:
->$ curl -i http://localhost:5000/api/v1.0/<scheme>/<table>
+>$ curl -i http://localhost:5000/api/v1.0/\<scheme>/\<table>
          <скрин будет позже>
       
-_.../api/v1.0/<scheme>/<table>{<column>:[<any_key>]}_  - показать конкретный процесс в виде json. 
+_.../api/v1.0/\<scheme>/\<table>{\<column>:[<any_key>]}_  - показать конкретный процесс в виде json. 
 
 Пример:
->$ curl -i http://localhost:5000/api/v1.0/<scheme>/<table>{<column>:[<any_key>]}
+>$ curl -i http://localhost:5000/api/v1.0/\<scheme>/\<table>{\<column>:[<any_key>]}
         <скрин будет позже>
         
 ###### POST_requests.py - все POST запросы:
 
 
-_.../api/v1.0/<scheme>/<table>_ - добавляет новый процесс в любую таблицу, эквивалентен INSERT запросу в бд, необходимо указать минимальные NOT NULL колонки.
+_.../api/v1.0/\<scheme>/\<table>_ - добавляет новый процесс в любую таблицу, эквивалентен INSERT запросу в бд, необходимо указать минимальные NOT NULL колонки.
 
 Пример:
->$ curl -i -H "Content-Type: application/json" -X POST -d '{"process_id": 1}' http://localhost:5000/api/v1.0/<scheme>/<table>
+>$ curl -i -H "Content-Type: application/json" -X POST -d '{"process_id": 1}' http://localhost:5000/api/v1.0/\<scheme>/\<table>
 Добавит в таблицу новый процесс с id = 1, остальные колонки будут равны null
                      <скрин будет позже>
 
 
 ###### PUT_requests.py - все PUT запросы:
 
-_.../api/v1.0/<scheme>/<table>{<column>=<any_key>}_ - 
+_.../api/v1.0/\<scheme>/\<table>{\<column>=<any_key>}_ - 
 К сожалению не очень функциональный запрос т.к. запрос UPDATE по структуре может быть сложным. Этот запрос эквиваленте запросу :
       
       UPDATE {scheme}."{table}" SET {final_json} WHERE {column} = {any_key}
@@ -74,7 +74,7 @@ _.../api/v1.0/<scheme>/<table>{<column>=<any_key>}_ -
 
 ###### DELETE_requests.py - все DELETE запросы:
 
-_.../api/v1.0/<scheme>/<table>{<column>=<any_key>}_  - удаляет любую запись, если это возможно.
+_.../api/v1.0/\<scheme>/\<table>{\<column>=<any_key>}_  - удаляет любую запись, если это возможно.
 Как и с UPDATE-ом, DELETE запрос может быть сложен по структуре, поэтому функционал минимален и равносилен следующему запросу:
 
       DELETE FROM {scheme}."{table}" WHERE {column} = {any_key}
