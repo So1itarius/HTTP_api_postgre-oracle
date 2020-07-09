@@ -12,8 +12,8 @@ def createConfig(path):
     config.set("Oracle", "password", "")
     config.set("Oracle", "address", "")
     config.add_section("authentication")
-    config.set("Oracle", "LOGIN", '')
-    config.set("Oracle", "PASS", "")
+    config.set("authentication", "LOGIN", '')
+    config.set("authentication", "PASS", "")
 
     with open(path, "w") as config_file:
         config.write(config_file)
